@@ -1,6 +1,6 @@
-package com.adolfoeloy.rinhabackend.api;
+package com.adolfoeloy.rinhabackend.infra;
 
-import com.adolfoeloy.rinhabackend.domain.customer.exception.CustomerLimitExceededException;
+import com.adolfoeloy.rinhabackend.domain.exception.CustomerLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

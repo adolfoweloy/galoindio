@@ -1,4 +1,4 @@
-package com.adolfoeloy.rinhabackend.domain.customer;
+package com.adolfoeloy.rinhabackend.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,11 +41,12 @@ public class Transaction {
     Transaction() {
     }
 
-    public Transaction(Customer customer, int amount, char type, String description) {
+    public Transaction(Customer customer, int amount, char type, String description, LocalDateTime createdAt) {
         this.customer = customer;
         this.amount = amount;
         this.type = type;
         this.description = description;
+        this.createdAt = createdAt;
     }
 
     public int getId() {

@@ -1,4 +1,4 @@
-package com.adolfoeloy.rinhabackend.domain.customer.exception;
+package com.adolfoeloy.rinhabackend.domain.exception;
 
 public class CustomerLimitExceededException extends RuntimeException {
 

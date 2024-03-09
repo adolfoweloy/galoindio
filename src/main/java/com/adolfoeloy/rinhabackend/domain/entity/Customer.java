@@ -1,8 +1,9 @@
-package com.adolfoeloy.rinhabackend.domain.customer;
+package com.adolfoeloy.rinhabackend.domain.entity;
 
-import com.adolfoeloy.rinhabackend.domain.customer.exception.CustomerLimitExceededException;
+import com.adolfoeloy.rinhabackend.domain.exception.CustomerLimitExceededException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,6 +11,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -29,7 +31,7 @@ public class Customer {
     @Column(name = "saldo")
     private int balance;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Transaction> transactions;
 
     @Deprecated
@@ -74,6 +76,6 @@ public class Customer {
     }
 
     public Transaction createTransaction(int amount, char type, String description) {
-        return new Transaction(this, amount, type, description);
+        return new Transaction(this, amount, type, description, LocalDateTime.now());
     }
 }
