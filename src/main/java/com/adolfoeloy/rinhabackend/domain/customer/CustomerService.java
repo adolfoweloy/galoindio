@@ -20,6 +20,8 @@ public class CustomerService {
         var optionalCustomer = customers.findById(customerId);
         if (optionalCustomer.isPresent()) {
             var customer = optionalCustomer.get();
+
+            // good to go with the transaction
             var transaction = customer.createTransaction(amount, type, description);
             transactions.save(transaction);
             customer.updateBalance(type, amount);

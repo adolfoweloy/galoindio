@@ -1,5 +1,6 @@
 package com.adolfoeloy.rinhabackend.domain.customer;
 
+import com.adolfoeloy.rinhabackend.domain.customer.exception.CustomerLimitExceededException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -65,6 +66,10 @@ public class Customer {
     }
 
     public void updateBalance(char type, int amount) {
+        var operation = (type == 'c') ? amount : amount * -1;
+        if (balance + operation + limit < 0) {
+            throw new CustomerLimitExceededException();
+        }
         this.balance += (type == 'c') ? amount : amount * -1;
     }
 
