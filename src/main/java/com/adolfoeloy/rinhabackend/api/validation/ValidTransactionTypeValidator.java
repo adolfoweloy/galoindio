@@ -6,6 +6,6 @@ import jakarta.validation.ConstraintValidatorContext;
 public class ValidTransactionTypeValidator implements ConstraintValidator<ValidTransactionType, Character> {
     @Override
     public boolean isValid(Character character, ConstraintValidatorContext constraintValidatorContext) {
-        return (character.charValue() == 'c' || character.charValue() == 'd');
+        return (character == 'c' || character == 'd');
     }
 }
