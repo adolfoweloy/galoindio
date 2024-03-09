@@ -3,6 +3,8 @@ package com.adolfoeloy.rinhabackend.domain.customer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class CustomerService {
     private final Customers customers;
@@ -14,10 +16,15 @@ public class CustomerService {
     }
 
     @Transactional
-    public Customer addTransactionEntryFor(Customer customer, int amount, char type, String description) {
-        var transaction = customer.createTransaction(amount, type, description);
-        transactions.save(transaction);
-        customer.updateBalance(type, amount);
-        return customers.save(customer);
+    public Optional<Customer> addTransactionEntryFor(int customerId, int amount, char type, String description) {
+        var optionalCustomer = customers.findById(customerId);
+        if (optionalCustomer.isPresent()) {
+            var customer = optionalCustomer.get();
+            var transaction = customer.createTransaction(amount, type, description);
+            transactions.save(transaction);
+            customer.updateBalance(type, amount);
+            return Optional.of(customers.save(customer));
+        }
+        return Optional.empty();
     }
 }

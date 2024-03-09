@@ -51,9 +51,8 @@ public class CustomerResource {
             @PathVariable("id") int id,
             @Valid @RequestBody Transaction transaction
     ) {
-        return customers.findById(id)
-                .map(customer -> customerService.addTransactionEntryFor(
-                        customer, transaction.value(),transaction.type(), transaction.description()))
+        return customerService.addTransactionEntryFor(
+                    id, transaction.value(),transaction.type(), transaction.description())
                 .map(customer -> new SimpleBalance(customer.getLimit(), customer.getBalance()))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> notFound().build());
