@@ -63,4 +63,8 @@ public class Customer {
     public List<Transaction> getTransactions() {
         return transactions;
     }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
 }

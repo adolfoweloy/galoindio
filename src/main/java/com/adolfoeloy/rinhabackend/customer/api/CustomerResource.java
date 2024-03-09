@@ -18,10 +18,15 @@ import java.util.List;
 public class CustomerResource {
 
     private final Customers customers;
+    private final com.adolfoeloy.rinhabackend.customer.model.Transactions transactions;
     private final CustomerConverter customerConverter;
 
-    public CustomerResource(Customers customers, CustomerConverter customerConverter) {
+    CustomerResource(
+            Customers customers,
+            com.adolfoeloy.rinhabackend.customer.model.Transactions transactions,
+            CustomerConverter customerConverter) {
         this.customers = customers;
+        this.transactions = transactions;
         this.customerConverter = customerConverter;
     }
 
@@ -35,11 +40,25 @@ public class CustomerResource {
 
     @PostMapping("/{id}/transacoes")
     ResponseEntity<SimpleBalance> transaction(
-            @PathVariable int id,
+            @PathVariable("id") int id,
             @RequestBody Transaction transaction
     ) {
-
-        return ResponseEntity.ok(new SimpleBalance(10000, -9098));
+        return customers.findById(id)
+                .map(customer -> new com.adolfoeloy.rinhabackend.customer.model.Transaction(
+                            customer,
+                            transaction.value(),
+                            transaction.type(),
+                            transaction.description()))
+                .map(transactions::save)
+                .map(t -> {
+                    var customer = t.getCustomer();
+                    var amount = (t.getType() == 'c') ? t.getAmount() : t.getAmount() * -1;
+                    customer.setBalance(customer.getBalance() + amount);
+                    return customers.save(customer);
+                })
+                .map(customer -> new SimpleBalance(customer.getLimit(), customer.getBalance()))
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     record SimpleBalance(
