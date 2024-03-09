@@ -1,8 +1,13 @@
 package com.adolfoeloy.rinhabackend.api;
 
+import com.adolfoeloy.rinhabackend.api.validation.ValidTransactionType;
 import com.adolfoeloy.rinhabackend.domain.customer.CustomerService;
 import com.adolfoeloy.rinhabackend.domain.customer.Customers;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +49,7 @@ public class CustomerResource {
     @PostMapping("/{id}/transacoes")
     ResponseEntity<SimpleBalance> transaction(
             @PathVariable("id") int id,
-            @RequestBody Transaction transaction
+            @Valid @RequestBody Transaction transaction
     ) {
         return customers.findById(id)
                 .map(customer -> customerService.addTransactionEntryFor(
@@ -87,12 +92,18 @@ public class CustomerResource {
     }
 
     record Transaction(
+            @Min(value = 0, message = "Valor deve ser positivo")
             @JsonProperty("valor")
             int value,
+
+            @ValidTransactionType
             @JsonProperty("tipo")
             char type,
+
+            @Length(min = 1, max = 10, message = "Descricao deve ter no entre 1 e 10 caracteres")
             @JsonProperty("descricao")
             String description,
+
             @JsonProperty("realizada_em")
             LocalDateTime createdAt
     ) { }

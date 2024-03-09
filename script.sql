@@ -18,7 +18,7 @@ CREATE TABLE transacoes(
   cliente_id INTEGER REFERENCES clientes(id),
   valor INTEGER DEFAULT 0,
   tipo CHAR CHECK (tipo = 'c' OR tipo = 'd'),
-  descricao TEXT,
+  descricao VARCHAR(10),
   realizada_em TIMESTAMP WITH TIME ZONE
 );
 
