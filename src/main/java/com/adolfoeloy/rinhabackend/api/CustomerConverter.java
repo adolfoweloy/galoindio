@@ -1,6 +1,6 @@
-package com.adolfoeloy.rinhabackend.customer.api;
+package com.adolfoeloy.rinhabackend.api;
 
-import com.adolfoeloy.rinhabackend.customer.model.Customer;
+import com.adolfoeloy.rinhabackend.domain.customer.Customer;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

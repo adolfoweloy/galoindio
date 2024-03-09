@@ -1,6 +1,7 @@
-package com.adolfoeloy.rinhabackend.customer.api;
+package com.adolfoeloy.rinhabackend.api;
 
-import com.adolfoeloy.rinhabackend.customer.model.Customers;
+import com.adolfoeloy.rinhabackend.domain.customer.CustomerService;
+import com.adolfoeloy.rinhabackend.domain.customer.Customers;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,20 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.springframework.http.ResponseEntity.notFound;
+
 @RestController
 @RequestMapping("clientes")
 public class CustomerResource {
 
     private final Customers customers;
-    private final com.adolfoeloy.rinhabackend.customer.model.Transactions transactions;
+    private final CustomerService customerService;
     private final CustomerConverter customerConverter;
 
     CustomerResource(
             Customers customers,
-            com.adolfoeloy.rinhabackend.customer.model.Transactions transactions,
+            CustomerService customerService,
             CustomerConverter customerConverter) {
         this.customers = customers;
-        this.transactions = transactions;
+        this.customerService = customerService;
         this.customerConverter = customerConverter;
     }
 
@@ -35,7 +38,7 @@ public class CustomerResource {
         return customers.findById(customerId)
                 .map(customerConverter::convert)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> notFound().build());
     }
 
     @PostMapping("/{id}/transacoes")
@@ -44,21 +47,11 @@ public class CustomerResource {
             @RequestBody Transaction transaction
     ) {
         return customers.findById(id)
-                .map(customer -> new com.adolfoeloy.rinhabackend.customer.model.Transaction(
-                            customer,
-                            transaction.value(),
-                            transaction.type(),
-                            transaction.description()))
-                .map(transactions::save)
-                .map(t -> {
-                    var customer = t.getCustomer();
-                    var amount = (t.getType() == 'c') ? t.getAmount() : t.getAmount() * -1;
-                    customer.setBalance(customer.getBalance() + amount);
-                    return customers.save(customer);
-                })
+                .map(customer -> customerService.addTransactionEntryFor(
+                        customer, transaction.value(),transaction.type(), transaction.description()))
                 .map(customer -> new SimpleBalance(customer.getLimit(), customer.getBalance()))
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> notFound().build());
     }
 
     record SimpleBalance(

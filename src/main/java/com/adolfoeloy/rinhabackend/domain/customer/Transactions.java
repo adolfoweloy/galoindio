@@ -1,4 +1,4 @@
-package com.adolfoeloy.rinhabackend.customer.model;
+package com.adolfoeloy.rinhabackend.domain.customer;
 
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;

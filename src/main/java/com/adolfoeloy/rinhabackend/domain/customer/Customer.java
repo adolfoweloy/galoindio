@@ -1,4 +1,4 @@
-package com.adolfoeloy.rinhabackend.customer.model;
+package com.adolfoeloy.rinhabackend.domain.customer;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,7 +64,11 @@ public class Customer {
         return transactions;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
+    public void updateBalance(char type, int amount) {
+        this.balance += (type == 'c') ? amount : amount * -1;
+    }
+
+    public Transaction createTransaction(int amount, char type, String description) {
+        return new Transaction(this, amount, type, description);
     }
 }

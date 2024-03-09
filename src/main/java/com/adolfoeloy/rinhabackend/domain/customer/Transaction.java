@@ -1,4 +1,4 @@
-package com.adolfoeloy.rinhabackend.customer.model;
+package com.adolfoeloy.rinhabackend.domain.customer;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
