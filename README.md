@@ -12,3 +12,13 @@ Esse projeto foi escrito utilizando as seguintes tecnologias disponibilizando um
 - Spring Data
 - Spring Web
 - PostgreSQL
+
+## Building
+
+Para fazer o build do projeto, basta executar o script abaixo:
+```
+./build-docker-image.sh
+```
+
+Esse script vai fazer o build do projeto que vai gerar um `jar` da aplicação.
+Em seguida o script cria uma imagem Docker que permite executar a aplicação em um container Docker.
