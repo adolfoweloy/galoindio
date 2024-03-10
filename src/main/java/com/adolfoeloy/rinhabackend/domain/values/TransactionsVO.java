@@ -5,7 +5,7 @@ import java.util.List;
 public record TransactionsVO(List<TransactionVO> transactions) {
     public int getTotal() {
         return transactions.stream()
-                .mapToInt(TransactionVO::value)
+                .mapToInt(TransactionVO::getValue)
                 .sum();
     }
 

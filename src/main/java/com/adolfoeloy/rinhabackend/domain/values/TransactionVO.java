@@ -20,4 +20,10 @@ public record TransactionVO(
     @JsonProperty("realizada_em")
     LocalDateTime createdAt
 ) {
+    int getValue() {
+        if (type == 'c') {
+            return value;
+        }
+        return -value;
+    }
 }

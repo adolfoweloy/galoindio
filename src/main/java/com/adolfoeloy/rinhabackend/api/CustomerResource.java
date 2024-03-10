@@ -47,7 +47,10 @@ public class CustomerResource {
     }
 
     record SimpleBalance(
+        @JsonProperty("limite")
         int limit,
+
+        @JsonProperty("saldo")
         int balance
     ) {}
 
